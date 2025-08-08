@@ -7,6 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Eye, RotateCcw, Maximize2 } from "lucide-react";
 import { motion } from "framer-motion";
 import * as THREE from "three";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
+import { useExporter } from "@/hooks/useExporter";
 
 interface ModelViewerProps {
   modelData?: {
@@ -79,6 +82,25 @@ function GeneratingModel() {
 
 export function ModelViewer({ modelData, isGenerating }: ModelViewerProps) {
   const [wireframe, setWireframe] = useState(false);
+  const exportGroupRef = useRef<THREE.Group>(null);
+  const { exportObject } = useExporter();
+
+  const handleExport = async (format: string) => {
+    if (!exportGroupRef.current) {
+      toast.error("Nothing to export");
+      return;
+    }
+    try {
+      toast.info(`Exporting ${format.toUpperCase()}...`);
+      await exportObject(format as any, exportGroupRef.current, {
+        filename: modelData?.id || "model",
+      });
+      toast.success(`Download started: ${(modelData?.id || "model")}.${format}`);
+    } catch (e) {
+      console.error(e);
+      toast.error("Export failed");
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -120,12 +142,34 @@ export function ModelViewer({ modelData, isGenerating }: ModelViewerProps) {
             <Button variant="glass" size="sm">
               <Maximize2 className="h-4 w-4" />
             </Button>
-            {modelData?.status === "completed" && (
-              <Button variant="generate" size="sm">
-                <Download className="h-4 w-4" />
-                Export
-              </Button>
-            )}
+{modelData?.status === "completed" && (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="generate" size="sm">
+        <Download className="h-4 w-4" />
+        Export
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end" className="min-w-52">
+      <DropdownMenuLabel>Download as</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={() => handleExport("glb")}>glTF Binary (.glb)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => handleExport("gltf")}>glTF JSON (.gltf)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => handleExport("obj")}>Wavefront OBJ (.obj)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => handleExport("stl")}>STL (.stl)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => handleExport("ply")}>PLY (.ply)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => handleExport("dae")}>Collada (.dae)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => handleExport("x3d")}>X3D (.x3d)</DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuLabel>Server-side (push.ai/Blender)</DropdownMenuLabel>
+      <DropdownMenuItem onClick={() => toast.info("FBX export requires server-side conversion via MCP/Blender.")}>FBX (.fbx)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => toast.info("3DS export requires server-side conversion via MCP/Blender.")}>3DS (.3ds)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => toast.info("Alembic export requires server-side conversion via MCP/Blender.")}>Alembic (.abc)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => toast.info("USD export requires server-side conversion via MCP/Blender.")}>USD (.usd)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => toast.info("SVG export will be added soon.")}>SVG (.svg)</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+)}
           </div>
         </div>
       </div>
@@ -150,7 +194,9 @@ export function ModelViewer({ modelData, isGenerating }: ModelViewerProps) {
             {isGenerating ? (
               <GeneratingModel />
             ) : modelData ? (
-              <PlaceholderModel />
+              <group ref={exportGroupRef} name="ExportGroup">
+                <PlaceholderModel />
+              </group>
             ) : (
               <Text
                 position={[0, 0, 0]}
