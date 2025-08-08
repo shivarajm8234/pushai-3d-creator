@@ -158,11 +158,11 @@ export function ModelViewer({ modelData, isGenerating }: ModelViewerProps) {
       <DropdownMenuItem onClick={() => handleExport("obj")}>Wavefront OBJ (.obj)</DropdownMenuItem>
       <DropdownMenuItem onClick={() => handleExport("stl")}>STL (.stl)</DropdownMenuItem>
       <DropdownMenuItem onClick={() => handleExport("ply")}>PLY (.ply)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("dae")}>Collada (.dae)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("x3d")}>X3D (.x3d)</DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuLabel>Server-side (push.ai/Blender)</DropdownMenuLabel>
       <DropdownMenuItem onClick={() => toast.info("FBX export requires server-side conversion via MCP/Blender.")}>FBX (.fbx)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => toast.info("Collada (.dae) export requires server-side conversion via MCP/Blender.")}>Collada (.dae)</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => toast.info("X3D export requires server-side conversion via MCP/Blender.")}>X3D (.x3d)</DropdownMenuItem>
       <DropdownMenuItem onClick={() => toast.info("3DS export requires server-side conversion via MCP/Blender.")}>3DS (.3ds)</DropdownMenuItem>
       <DropdownMenuItem onClick={() => toast.info("Alembic export requires server-side conversion via MCP/Blender.")}>Alembic (.abc)</DropdownMenuItem>
       <DropdownMenuItem onClick={() => toast.info("USD export requires server-side conversion via MCP/Blender.")}>USD (.usd)</DropdownMenuItem>

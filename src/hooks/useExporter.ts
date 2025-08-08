@@ -135,26 +135,8 @@ export function useExporter() {
         });
         return;
       }
-      case "dae": {
-        const { ColladaExporter } = await import(
-          "three/examples/jsm/exporters/ColladaExporter.js"
-        );
-        const exporter = new ColladaExporter();
-        const { data } = exporter.parse(object);
-        const blob = new Blob([data], { type: "model/vnd.collada+xml" });
-        downloadBlob(blob, `${name}.dae`);
-        return;
-      }
-      case "x3d": {
-        const { X3DExporter } = await import(
-          "three/examples/jsm/exporters/X3DExporter.js"
-        );
-        const exporter = new X3DExporter();
-        const result = exporter.parse(object);
-        const blob = new Blob([result], { type: "model/x3d+xml" });
-        downloadBlob(blob, `${name}.x3d`);
-        return;
-      }
+      case "dae":
+      case "x3d":
       case "svg":
       case "fbx":
       case "3ds":
