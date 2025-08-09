@@ -15,7 +15,12 @@ interface ModelData {
   meshUrl?: string;
   thumbnailUrl?: string;
   timestamp: Date;
-  options?: any;
+  description?: string;
+  options?: {
+    quality: "draft" | "standard" | "high";
+    style: "realistic" | "stylized" | "lowpoly" | "sculpted";
+    complexity: "simple" | "medium" | "detailed";
+  };
 }
 
 const Index = () => {
@@ -92,13 +97,14 @@ const Index = () => {
         prompt,
         status: "generating",
         timestamp: new Date(),
+        description: response.description,
         options
       };
       
       setCurrentModel(newModel);
       setModelHistory(prev => [newModel, ...prev]);
       
-      toast.success("Generation started! Your 3D model is being created...");
+      toast.success("Model generation started with Groq AI!");
     } catch (error) {
       setIsGenerating(false);
       toast.error("Failed to start generation. Please try again.");

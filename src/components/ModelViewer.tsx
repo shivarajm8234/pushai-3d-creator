@@ -10,6 +10,7 @@ import * as THREE from "three";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useExporter } from "@/hooks/useExporter";
+import { GeneratedModel } from "@/components/GeneratedModel";
 
 interface ModelViewerProps {
   modelData?: {
@@ -17,7 +18,14 @@ interface ModelViewerProps {
     prompt: string;
     status: "generating" | "completed" | "error";
     meshUrl?: string;
+    thumbnailUrl?: string;
     timestamp: Date;
+    description?: string;
+    options?: {
+      quality: "draft" | "standard" | "high";
+      style: "realistic" | "stylized" | "lowpoly" | "sculpted";
+      complexity: "simple" | "medium" | "detailed";
+    };
   };
   isGenerating: boolean;
 }
@@ -195,7 +203,11 @@ export function ModelViewer({ modelData, isGenerating }: ModelViewerProps) {
               <GeneratingModel />
             ) : modelData ? (
               <group ref={exportGroupRef} name="ExportGroup">
-                <PlaceholderModel />
+                <GeneratedModel 
+                  prompt={modelData.prompt}
+                  description={modelData.description}
+                  options={modelData.options || { quality: "standard", style: "realistic", complexity: "medium" }}
+                />
               </group>
             ) : (
               <Text
