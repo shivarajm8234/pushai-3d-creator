@@ -5,6 +5,7 @@ import { PromptInput } from "@/components/PromptInput";
 import { ModelViewer } from "@/components/ModelViewer";
 import { ModelHistory } from "@/components/ModelHistory";
 import { MCPService, GenerationRequest } from "@/services/mcpService";
+import { GroqService } from "@/services/groqService";
 import { Cpu, Zap, Sparkles } from "lucide-react";
 
 interface ModelData {
@@ -22,6 +23,7 @@ const Index = () => {
   const [currentModel, setCurrentModel] = useState<ModelData | undefined>();
   const [modelHistory, setModelHistory] = useState<ModelData[]>([]);
   const [mcpService] = useState(() => new MCPService());
+  const [groqService] = useState(() => new GroqService("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"));
 
   useEffect(() => {
     // Set up MCP service event listeners
@@ -81,7 +83,9 @@ const Index = () => {
         options
       };
       
-      const response = await mcpService.generateModel(request);
+      // Use Groq-enhanced generation
+      const groqRequest = { prompt, options };
+      const response = await groqService.generateModel(groqRequest);
       
       const newModel: ModelData = {
         id: response.id,
