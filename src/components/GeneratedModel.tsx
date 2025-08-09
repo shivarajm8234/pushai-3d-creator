@@ -13,7 +13,7 @@ interface GeneratedModelProps {
 }
 
 export function GeneratedModel({ prompt, description, options }: GeneratedModelProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     if (meshRef.current) {
@@ -27,216 +27,234 @@ export function GeneratedModel({ prompt, description, options }: GeneratedModelP
     const lowerPrompt = prompt.toLowerCase();
     
     if (lowerPrompt.includes('bird') || lowerPrompt.includes('eagle') || lowerPrompt.includes('owl')) {
-      // Create bird-like shape
-      const geometry = new THREE.Group();
-      
-      // Body (ellipsoid)
-      const body = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 16, 8),
-        new THREE.MeshStandardMaterial({ color: options.style === 'realistic' ? '#8B4513' : '#FF6B35' })
+      // Create bird-like shape using basic geometries
+      return (
+        <group>
+          {/* Body (ellipsoid) */}
+          <mesh position={[0, 0, 0]} scale={[1, 1.5, 0.8]}>
+            <sphereGeometry args={[1, 16, 8]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#8B4513' : '#FF6B35'} />
+          </mesh>
+          
+          {/* Wings */}
+          <mesh position={[-1.2, 0, 0]} rotation={[0, 0, Math.PI / 4]}>
+            <coneGeometry args={[0.8, 2, 8]} />
+            <meshStandardMaterial 
+              color={options.style === 'realistic' ? '#654321' : '#FF8C42'}
+              transparent
+              opacity={0.8}
+            />
+          </mesh>
+          <mesh position={[1.2, 0, 0]} rotation={[0, 0, -Math.PI / 4]}>
+            <coneGeometry args={[0.8, 2, 8]} />
+            <meshStandardMaterial 
+              color={options.style === 'realistic' ? '#654321' : '#FF8C42'}
+              transparent
+              opacity={0.8}
+            />
+          </mesh>
+          
+          {/* Head */}
+          <mesh position={[0, 1.8, 0.3]}>
+            <sphereGeometry args={[0.5, 12, 8]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#A0522D' : '#FFB347'} />
+          </mesh>
+          
+          {/* Beak */}
+          <mesh position={[0, 1.8, 0.7]} rotation={[Math.PI / 2, 0, 0]}>
+            <coneGeometry args={[0.1, 0.4, 6]} />
+            <meshStandardMaterial color="#FFA500" />
+          </mesh>
+        </group>
       );
-      body.scale.set(1, 1.5, 0.8);
-      geometry.add(body);
-      
-      // Wings
-      const wingGeo = new THREE.ConeGeometry(0.8, 2, 8);
-      const wingMat = new THREE.MeshStandardMaterial({ 
-        color: options.style === 'realistic' ? '#654321' : '#FF8C42',
-        transparent: true,
-        opacity: 0.8
-      });
-      
-      const leftWing = new THREE.Mesh(wingGeo, wingMat);
-      leftWing.position.set(-1.2, 0, 0);
-      leftWing.rotation.z = Math.PI / 4;
-      geometry.add(leftWing);
-      
-      const rightWing = new THREE.Mesh(wingGeo, wingMat);
-      rightWing.position.set(1.2, 0, 0);
-      rightWing.rotation.z = -Math.PI / 4;
-      geometry.add(rightWing);
-      
-      // Head
-      const head = new THREE.Mesh(
-        new THREE.SphereGeometry(0.5, 12, 8),
-        new THREE.MeshStandardMaterial({ color: options.style === 'realistic' ? '#A0522D' : '#FFB347' })
-      );
-      head.position.set(0, 1.8, 0.3);
-      geometry.add(head);
-      
-      // Beak
-      const beak = new THREE.Mesh(
-        new THREE.ConeGeometry(0.1, 0.4, 6),
-        new THREE.MeshStandardMaterial({ color: '#FFA500' })
-      );
-      beak.position.set(0, 1.8, 0.7);
-      beak.rotation.x = Math.PI / 2;
-      geometry.add(beak);
-      
-      return geometry;
     }
     
     if (lowerPrompt.includes('car') || lowerPrompt.includes('vehicle') || lowerPrompt.includes('automobile')) {
-      // Create car-like shape
-      const geometry = new THREE.Group();
-      
-      // Main body
-      const body = new THREE.Mesh(
-        new THREE.BoxGeometry(3, 1, 1.5),
-        new THREE.MeshStandardMaterial({ 
-          color: options.style === 'realistic' ? '#FF0000' : '#00D9FF',
-          metalness: 0.8,
-          roughness: 0.2
-        })
+      return (
+        <group>
+          {/* Main body */}
+          <mesh position={[0, 0, 0]}>
+            <boxGeometry args={[3, 1, 1.5]} />
+            <meshStandardMaterial 
+              color={options.style === 'realistic' ? '#FF0000' : '#00D9FF'}
+              metalness={0.8}
+              roughness={0.2}
+            />
+          </mesh>
+          
+          {/* Cabin */}
+          <mesh position={[0, 1, 0]}>
+            <boxGeometry args={[2, 1, 1.2]} />
+            <meshStandardMaterial 
+              color={options.style === 'realistic' ? '#CCCCCC' : '#0099CC'}
+              transparent
+              opacity={0.7}
+            />
+          </mesh>
+          
+          {/* Wheels */}
+          <mesh position={[-1.2, -0.7, 0.8]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.4, 0.4, 0.2, 16]} />
+            <meshStandardMaterial color="#333333" />
+          </mesh>
+          <mesh position={[1.2, -0.7, 0.8]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.4, 0.4, 0.2, 16]} />
+            <meshStandardMaterial color="#333333" />
+          </mesh>
+          <mesh position={[-1.2, -0.7, -0.8]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.4, 0.4, 0.2, 16]} />
+            <meshStandardMaterial color="#333333" />
+          </mesh>
+          <mesh position={[1.2, -0.7, -0.8]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.4, 0.4, 0.2, 16]} />
+            <meshStandardMaterial color="#333333" />
+          </mesh>
+        </group>
       );
-      geometry.add(body);
-      
-      // Cabin
-      const cabin = new THREE.Mesh(
-        new THREE.BoxGeometry(2, 1, 1.2),
-        new THREE.MeshStandardMaterial({ 
-          color: options.style === 'realistic' ? '#CCCCCC' : '#0099CC',
-          transparent: true,
-          opacity: 0.7
-        })
-      );
-      cabin.position.set(0, 1, 0);
-      geometry.add(cabin);
-      
-      // Wheels
-      const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.2, 16);
-      const wheelMat = new THREE.MeshStandardMaterial({ color: '#333333' });
-      
-      const wheels = [
-        [-1.2, -0.7, 0.8],
-        [1.2, -0.7, 0.8],
-        [-1.2, -0.7, -0.8],
-        [1.2, -0.7, -0.8]
-      ];
-      
-      wheels.forEach(([x, y, z]) => {
-        const wheel = new THREE.Mesh(wheelGeo, wheelMat);
-        wheel.position.set(x, y, z);
-        wheel.rotation.z = Math.PI / 2;
-        geometry.add(wheel);
-      });
-      
-      return geometry;
     }
     
     if (lowerPrompt.includes('house') || lowerPrompt.includes('building') || lowerPrompt.includes('home')) {
-      // Create house-like shape
-      const geometry = new THREE.Group();
-      
-      // Base
-      const base = new THREE.Mesh(
-        new THREE.BoxGeometry(2.5, 2, 2),
-        new THREE.MeshStandardMaterial({ 
-          color: options.style === 'realistic' ? '#DEB887' : '#FF9999'
-        })
+      return (
+        <group>
+          {/* Base */}
+          <mesh position={[0, 0, 0]}>
+            <boxGeometry args={[2.5, 2, 2]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#DEB887' : '#FF9999'} />
+          </mesh>
+          
+          {/* Roof */}
+          <mesh position={[0, 1.75, 0]} rotation={[0, Math.PI / 4, 0]}>
+            <coneGeometry args={[2, 1.5, 4]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#8B4513' : '#FF6666'} />
+          </mesh>
+          
+          {/* Door */}
+          <mesh position={[0, -0.25, 1.05]}>
+            <boxGeometry args={[0.6, 1.5, 0.1]} />
+            <meshStandardMaterial color="#654321" />
+          </mesh>
+          
+          {/* Windows */}
+          <mesh position={[-0.8, 0.3, 1.05]}>
+            <boxGeometry args={[0.5, 0.5, 0.05]} />
+            <meshStandardMaterial color="#87CEEB" transparent opacity={0.6} />
+          </mesh>
+          <mesh position={[0.8, 0.3, 1.05]}>
+            <boxGeometry args={[0.5, 0.5, 0.05]} />
+            <meshStandardMaterial color="#87CEEB" transparent opacity={0.6} />
+          </mesh>
+        </group>
       );
-      geometry.add(base);
-      
-      // Roof
-      const roof = new THREE.Mesh(
-        new THREE.ConeGeometry(2, 1.5, 4),
-        new THREE.MeshStandardMaterial({ 
-          color: options.style === 'realistic' ? '#8B4513' : '#FF6666'
-        })
-      );
-      roof.position.set(0, 1.75, 0);
-      roof.rotation.y = Math.PI / 4;
-      geometry.add(roof);
-      
-      // Door
-      const door = new THREE.Mesh(
-        new THREE.BoxGeometry(0.6, 1.5, 0.1),
-        new THREE.MeshStandardMaterial({ color: '#654321' })
-      );
-      door.position.set(0, -0.25, 1.05);
-      geometry.add(door);
-      
-      // Windows
-      const windowGeo = new THREE.BoxGeometry(0.5, 0.5, 0.05);
-      const windowMat = new THREE.MeshStandardMaterial({ 
-        color: '#87CEEB',
-        transparent: true,
-        opacity: 0.6
-      });
-      
-      const leftWindow = new THREE.Mesh(windowGeo, windowMat);
-      leftWindow.position.set(-0.8, 0.3, 1.05);
-      geometry.add(leftWindow);
-      
-      const rightWindow = new THREE.Mesh(windowGeo, windowMat);
-      rightWindow.position.set(0.8, 0.3, 1.05);
-      geometry.add(rightWindow);
-      
-      return geometry;
     }
     
     if (lowerPrompt.includes('tree') || lowerPrompt.includes('plant') || lowerPrompt.includes('forest')) {
-      // Create tree-like shape
-      const geometry = new THREE.Group();
-      
-      // Trunk
-      const trunk = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.3, 0.4, 2, 8),
-        new THREE.MeshStandardMaterial({ color: '#8B4513' })
+      return (
+        <group>
+          {/* Trunk */}
+          <mesh position={[0, -1, 0]}>
+            <cylinderGeometry args={[0.3, 0.4, 2, 8]} />
+            <meshStandardMaterial color="#8B4513" />
+          </mesh>
+          
+          {/* Foliage layers */}
+          <mesh position={[0, 0.5, 0]}>
+            <sphereGeometry args={[1.2, 12, 8]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#228B22' : '#00FF88'} />
+          </mesh>
+          <mesh position={[0, 0.8, 0]}>
+            <sphereGeometry args={[1.0, 12, 8]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#32CD32' : '#88FF00'} />
+          </mesh>
+          <mesh position={[0, 1.1, 0]}>
+            <sphereGeometry args={[0.8, 12, 8]} />
+            <meshStandardMaterial color={options.style === 'realistic' ? '#90EE90' : '#CCFF99'} />
+          </mesh>
+        </group>
       );
-      trunk.position.set(0, -1, 0);
-      geometry.add(trunk);
-      
-      // Foliage layers
-      const foliageColors = options.style === 'realistic' 
-        ? ['#228B22', '#32CD32', '#90EE90'] 
-        : ['#00FF88', '#88FF00', '#CCFF99'];
-      
-      foliageColors.forEach((color, i) => {
-        const foliage = new THREE.Mesh(
-          new THREE.SphereGeometry(1.2 - i * 0.2, 12, 8),
-          new THREE.MeshStandardMaterial({ color })
-        );
-        foliage.position.set(0, 0.5 + i * 0.3, 0);
-        geometry.add(foliage);
-      });
-      
-      return geometry;
     }
     
-    // Default complex shape for other prompts
-    const geometry = new THREE.Group();
+    if (lowerPrompt.includes('robot') || lowerPrompt.includes('mech') || lowerPrompt.includes('android')) {
+      return (
+        <group>
+          {/* Body */}
+          <mesh position={[0, 0, 0]}>
+            <boxGeometry args={[1.5, 2, 1]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.1} />
+          </mesh>
+          
+          {/* Head */}
+          <mesh position={[0, 1.5, 0]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="#E0E0E0" metalness={0.8} roughness={0.2} />
+          </mesh>
+          
+          {/* Arms */}
+          <mesh position={[-1.2, 0.5, 0]}>
+            <boxGeometry args={[0.4, 1.5, 0.4]} />
+            <meshStandardMaterial color="#A0A0A0" metalness={0.7} roughness={0.3} />
+          </mesh>
+          <mesh position={[1.2, 0.5, 0]}>
+            <boxGeometry args={[0.4, 1.5, 0.4]} />
+            <meshStandardMaterial color="#A0A0A0" metalness={0.7} roughness={0.3} />
+          </mesh>
+          
+          {/* Legs */}
+          <mesh position={[-0.5, -1.5, 0]}>
+            <boxGeometry args={[0.5, 1.5, 0.5]} />
+            <meshStandardMaterial color="#808080" metalness={0.6} roughness={0.4} />
+          </mesh>
+          <mesh position={[0.5, -1.5, 0]}>
+            <boxGeometry args={[0.5, 1.5, 0.5]} />
+            <meshStandardMaterial color="#808080" metalness={0.6} roughness={0.4} />
+          </mesh>
+          
+          {/* Eyes */}
+          <mesh position={[-0.3, 1.6, 0.5]}>
+            <sphereGeometry args={[0.1, 8, 8]} />
+            <meshStandardMaterial color="#00FF00" emissive="#00FF00" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0.3, 1.6, 0.5]}>
+            <sphereGeometry args={[0.1, 8, 8]} />
+            <meshStandardMaterial color="#00FF00" emissive="#00FF00" emissiveIntensity={0.5} />
+          </mesh>
+        </group>
+      );
+    }
     
-    // Create an interesting procedural shape based on prompt length and content
+    // Default abstract shape for other prompts
     const complexity = options.complexity === 'simple' ? 3 : options.complexity === 'medium' ? 5 : 8;
-    const size = 1.5;
+    const elements = [];
     
     for (let i = 0; i < complexity; i++) {
       const angle = (i / complexity) * Math.PI * 2;
       const radius = 0.5 + Math.sin(i) * 0.3;
+      const size = 1.5;
       
-      const shape = new THREE.Mesh(
-        new THREE.SphereGeometry(radius, 8, 6),
-        new THREE.MeshStandardMaterial({
-          color: new THREE.Color().setHSL((i / complexity + 0.3) % 1, 0.8, 0.6),
-          metalness: options.style === 'realistic' ? 0.1 : 0.7,
-          roughness: options.style === 'realistic' ? 0.8 : 0.3
-        })
+      elements.push(
+        <mesh 
+          key={i}
+          position={[
+            Math.cos(angle) * size,
+            Math.sin(angle * 0.5) * 0.5,
+            Math.sin(angle) * size
+          ]}
+        >
+          <sphereGeometry args={[radius, 8, 6]} />
+          <meshStandardMaterial
+            color={`hsl(${(i / complexity * 360 + 120) % 360}, 80%, 60%)`}
+            metalness={options.style === 'realistic' ? 0.1 : 0.7}
+            roughness={options.style === 'realistic' ? 0.8 : 0.3}
+          />
+        </mesh>
       );
-      
-      shape.position.set(
-        Math.cos(angle) * size,
-        Math.sin(angle * 0.5) * 0.5,
-        Math.sin(angle) * size
-      );
-      
-      geometry.add(shape);
     }
     
-    return geometry;
+    return <group>{elements}</group>;
   };
 
-  const modelGeometry = createGeometry();
-
-  return <primitive ref={meshRef} object={modelGeometry} />;
+  return (
+    <group ref={meshRef}>
+      {createGeometry()}
+    </group>
+  );
 }
