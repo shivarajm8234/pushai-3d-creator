@@ -150,34 +150,34 @@ export function ModelViewer({ modelData, isGenerating }: ModelViewerProps) {
             <Button variant="glass" size="sm">
               <Maximize2 className="h-4 w-4" />
             </Button>
-{modelData?.status === "completed" && (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="generate" size="sm">
-        <Download className="h-4 w-4" />
-        Export
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="min-w-52">
-      <DropdownMenuLabel>Download as</DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => handleExport("glb")}>glTF Binary (.glb)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("gltf")}>glTF JSON (.gltf)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("obj")}>Wavefront OBJ (.obj)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("stl")}>STL (.stl)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("ply")}>PLY (.ply)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("dae")}>Collada (.dae)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => handleExport("x3d")}>X3D (.x3d)</DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuLabel>Server-side (push.ai/Blender)</DropdownMenuLabel>
-      <DropdownMenuItem onClick={() => toast.info("FBX export requires server-side conversion via MCP/Blender.")}>FBX (.fbx)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => toast.info("3DS export requires server-side conversion via MCP/Blender.")}>3DS (.3ds)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => toast.info("Alembic export requires server-side conversion via MCP/Blender.")}>Alembic (.abc)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => toast.info("USD export requires server-side conversion via MCP/Blender.")}>USD (.usd)</DropdownMenuItem>
-      <DropdownMenuItem onClick={() => toast.info("SVG export will be added soon.")}>SVG (.svg)</DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-)}
+            {modelData?.status === "completed" && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="generate" size="sm">
+                    <Download className="h-4 w-4" />
+                    Export
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-52">
+                  <DropdownMenuLabel>Download as</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleExport("glb")}>glTF Binary (.glb)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("gltf")}>glTF JSON (.gltf)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("obj")}>Wavefront OBJ (.obj)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("stl")}>STL (.stl)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("ply")}>PLY (.ply)</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Server-side (push.ai/Blender)</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => handleExport("dae")}>Collada (.dae)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport("x3d")}>X3D (.x3d)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info("FBX export requires server-side conversion via MCP/Blender.")}>FBX (.fbx)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info("3DS export requires server-side conversion via MCP/Blender.")}>3DS (.3ds)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info("Alembic export requires server-side conversion via MCP/Blender.")}>Alembic (.abc)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info("USD export requires server-side conversion via MCP/Blender.")}>USD (.usd)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info("SVG export will be added soon.")}>SVG (.svg)</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </div>
       </div>
